@@ -92,100 +92,98 @@
     </v-app-bar>
 
     <!-- Show dialog search -->
-    <v-main>
-      
-      <v-row justify="center">
-        <v-dialog
-          v-model="dialog"
-          :width="
-            $vuetify.breakpoint.sm || $vuetify.breakpoint.xs ? '100%' : '90%'
-          "
-          scrollable
-          transition="dialog-bottom-transition"
+    <v-row justify="center">
+      <v-dialog
+        v-model="dialog"
+        :width="
+          $vuetify.breakpoint.sm || $vuetify.breakpoint.xs ? '100%' : '90%'
+        "
+        scrollable
+        transition="dialog-bottom-transition"
+      >
+        <v-card
+          height="100dvh"
+          :class="isDark ? 'search-modal-dark' : 'search-modal-light'"
+          class="pa-0 card-shadow rounded-b-0"
+          elevation="5"
         >
-          <v-card
-            height="100dvh"
-            :class="isDark ? 'search-modal-dark' : 'search-modal-light'"
-            class="pa-0 card-shadow rounded-b-0"
-            elevation="5"
-          >
-            <v-card-title class="pa-0">
-              <v-text-field
-                v-model="searchText"
-                label="Search"
-                elevation="0"
-                hide-details
-                class="px-2 pb-2"
-                autofocus
-                darken-4
-                @input="performSearch"
+          <v-card-title class="pa-0">
+            <v-text-field
+              v-model="searchText"
+              label="Search"
+              elevation="0"
+              hide-details
+              class="px-2 pb-2"
+              autofocus
+              darken-4
+              @input="performSearch"
+            >
+              <template v-slot:prepend>
+                <v-icon @click="dialog = false">mdi-chevron-left</v-icon>
+              </template>
+            </v-text-field>
+          </v-card-title>
+          <v-card-text class="pa-0 scroll-dialog" @scroll="handleScroll">
+            <v-row
+              class="fill-height ma-0"
+              align-content="center"
+              justify="center"
+              v-if="searchLoading"
+            >
+              <v-col
+                class="text-lg-subtitle-1 text-md-subtitle-1 text-sm-small text-center lightColor--text"
+                cols="12"
               >
-                <template v-slot:prepend>
-                  <v-icon @click="dialog = false">mdi-chevron-left</v-icon>
-                </template>
-              </v-text-field>
-            </v-card-title>
-            <v-card-text class="pa-0 scroll-dialog" @scroll="handleScroll">
-              <v-row
-                class="fill-height ma-0"
-                align-content="center"
-                justify="center"
-                v-if="searchLoading"
-              >
-                <v-col
-                  class="text-lg-subtitle-1 text-md-subtitle-1 text-sm-small text-center lightColor--text"
-                  cols="12"
+                Please wait a moment ...
+              </v-col>
+              <v-col lg="3" md="4" sm="6" cols="10">
+                <v-progress-linear
+                  color="lightColor"
+                  indeterminate
+                  rounded
+                  height="6"
+                ></v-progress-linear>
+              </v-col>
+            </v-row>
+
+            <CardSearchResult v-else :posters="searchResult" @go-to-detail="gotoRouteDetails" />
+
+            <!-- Loading spinner when fetching new data -->
+            <v-row v-if="loadingMore">
+              <v-col cols="12" class="text-center">
+                <v-progress-circular
+                  indeterminate
+                  color="primary"
+                ></v-progress-circular>
+              </v-col>
+            </v-row>
+
+            <!-- Show message when no data found -->
+            <v-row
+              v-if="searchResult.length == 0 && !searchLoading"
+              class="fill-height ma-0"
+              align-content="center"
+              justify="center"
+            >
+              <v-col cols="12" class="text-center">
+                <p
+                  class="text-lg-subtitle-1 text-md-subtitle-1 text-sm-small"
                 >
-                  Please wait a moment ...
-                </v-col>
-                <v-col lg="3" md="4" sm="6" cols="10">
-                  <v-progress-linear
-                    color="lightColor"
-                    indeterminate
-                    rounded
-                    height="6"
-                  ></v-progress-linear>
-                </v-col>
-              </v-row>
-
-              <CardSearchResult v-else :posters="searchResult" @go-to-detail="gotoRouteDetails" />
-
-              <!-- Loading spinner when fetching new data -->
-              <v-row v-if="loadingMore">
-                <v-col cols="12" class="text-center">
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                  ></v-progress-circular>
-                </v-col>
-              </v-row>
-
-              <!-- Show message when no data found -->
-              <v-row
-                v-if="searchResult.length == 0 && !searchLoading"
-                class="fill-height ma-0"
-                align-content="center"
-                justify="center"
-              >
-                <v-col cols="12" class="text-center">
-                  <p
-                    class="text-lg-subtitle-1 text-md-subtitle-1 text-sm-small"
-                  >
-                    No result found
-                  </p>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-      </v-row>
-
+                  No result found
+                </p>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-row>
+    <ModalLoading :dialog="loader" />
+    <v-main>
       <div class="scroll-container">
         <router-view />
       </div>
     </v-main>
 
-    <ModalLoading :dialog="loader" />
   </v-app>
 </template>
 
@@ -310,6 +308,8 @@ html,
 body {
   height: 100%;
   overflow: hidden; /* Prevent body from scrolling */
+  margin: 0;
+  padding: 0;
 }
 
 .v-application {

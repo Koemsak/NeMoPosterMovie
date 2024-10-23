@@ -1,5 +1,5 @@
 <template>
-  <v-row align-content="center" class="fill-height" justify="center">
+  <v-row align-content="center" class="fill-height ma-0" justify="center">
     <v-dialog max-width="400" elevation="0" v-model="localDialog" persistent>
       <v-card color="transparent" elevation="0" class="pa-5">
         <v-card-text class="text-center" justify="center">
