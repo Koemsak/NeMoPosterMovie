@@ -1,4 +1,4 @@
-# admin-dashboard
+# Movie Poster
 
 ## Project setup
 ```
