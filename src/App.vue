@@ -169,7 +169,10 @@
                 <p
                   class="text-lg-subtitle-1 text-md-subtitle-1 text-sm-small"
                 >
-                  No result found
+                  <a href="https://www.revenuecpmgate.com/ck8iahprk?key=99092087ebaee594803a1471bbe4898d"
+                    target="_blank">
+                    Click here
+                  </a> to support us.
                 </p>
               </v-col>
             </v-row>
